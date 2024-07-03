@@ -12,11 +12,10 @@ import random
 import subprocess
 from PIL import Image, ImageDraw, ImageFont
 import string
-from json import dumps
+from json import dumps, loads
 from datetime import datetime, time, timedelta
 from requests import Request, Response, post, put, patch, delete, get, request
 from urllib.parse import quote, urlencode
-import time
 from timpypi.common import exception
 
 
@@ -24,7 +23,7 @@ _logger = logging.getLogger(__name__)
 
 
 @exception
-def cal_sign(req: Request, secret: str):
+def calcSignature(req: Request, secret: str):
     queries = dict(req.params)
     keys = [k for k in queries if k not in ["sign", "access_token"]]
     keys.sort()
@@ -40,20 +39,20 @@ def generateSHA256(input: str, secret: str):
     return h.hexdigest()
 
 
+@staticmethod
 @exception
-def get_access_token(
-    app_key: str, app_secret: str, auth_code: str, grant_type="authorized_code"
-) -> Response:
-    path = f"https://auth.tiktok-shops.com/api/v2/token/get?app_key={app_key}&auth_code={auth_code}&app_secret={app_secret}&grant_type={grant_type}"
-    return get(url=path, headers={"Content-Type": "application/json"})
-
-
-@exception
-def refresh_token(): ...
+def getAccessToken(domain: str, api: str, params:dict) -> Response:
+    url = meticulousteURL(domain=f"{domain}{api}",params=params)
+    return get(url=url, headers={"Content-Type": "application/json"})
 
 
 @exception
-def effect_rainbow(message: str, meme=""):
+def refreshAccessToken(): ...
+
+
+@staticmethod
+@exception
+def effectRainbow(message: str, meme=""):
     if not meme:
         meme = "web/static/img/smile.svg"
     return {
@@ -66,8 +65,9 @@ def effect_rainbow(message: str, meme=""):
     }
 
 
+@staticmethod
 @exception
-def convert_response_value(data: dict, keys: list):
+def convertDictValueToString(data: dict, keys: list):
     """
     @Description:
         Convert value to string
@@ -88,9 +88,10 @@ def generateSign(api: str, params: dict, secret: str):
     if params.get("timestamp", False):
         params.update({"timestamp": timestamp})
     req = Request(url=api, params=params)
-    return cal_sign(req, secret)
+    return calcSignature(req, secret)
 
 
+@staticmethod
 @exception
 def requestGeneral(
     method: Request,
@@ -105,7 +106,10 @@ def requestGeneral(
         params["timestamp"] = timestamp
     sinature = generateSign(api=api, params=params, secret=secret)
     params.update({"sign": sinature})
-    url = f"{domain}{api}"
+    return method(url=meticulousteURL(domain=f"{domain}{api}", params=params), params=params, data=body)
+
+
+@exception
+def meticulousteURL(domain: str, params: dict) -> str:
     pairs = [f"{key}={value}" for key, value in params.items()]
-    url = f"{domain}{api}?" + "&".join(pairs)
-    return method(url=url, params=params, data=body)
+    return domain + "?" + "&".join(pairs)

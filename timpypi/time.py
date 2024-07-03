@@ -6,7 +6,7 @@ _logger = logging.getLogger(__name__)
 
 
 @exception
-def timestamp_to_datetime(timestamp) -> datetime:
+def timestampToDatetime(timestamp) -> datetime:
     if not (isinstance(timestamp, float) or isinstance(timestamp, int)):
         raise ValueError("Timestamp must be an integer or float")
     timestamp = float(timestamp)

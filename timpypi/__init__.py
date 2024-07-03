@@ -1,2 +1,3 @@
-from . import Tiktok
-from . import Time
+from . import common
+from . import tiktok
+from . import time

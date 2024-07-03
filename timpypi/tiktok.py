@@ -17,7 +17,7 @@ from datetime import datetime, time, timedelta
 from requests import Request, Response, post, put, patch, delete, get, request
 from urllib.parse import quote, urlencode
 import time
-from General import exception
+from timpypi.common import exception
 
 
 _logger = logging.getLogger(__name__)

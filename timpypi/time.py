@@ -1,6 +1,6 @@
 from datetime import datetime
 import logging
-from General import exception
+from timpypi.common import exception
 
 _logger = logging.getLogger(__name__)
 

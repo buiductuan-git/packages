@@ -1,3 +1,6 @@
-## Tim Library
+## INSTALL PACKAGE
 
-Adjust func utils fordOdoo developer
+```
+pip install timpypi
+
+```

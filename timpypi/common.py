@@ -1,8 +1,9 @@
+
+
 import logging
 
+
 _logger = logging.getLogger(__name__)
-
-
 def exception(func):
     def wrapper(*args, **kwargs):
         try:

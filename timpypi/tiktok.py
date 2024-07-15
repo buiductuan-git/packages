@@ -41,13 +41,14 @@ def generateSHA256(input: str, secret: str):
 
 @staticmethod
 @exception
-def getAccessToken(domain: str, api: str, params:dict) -> Response:
-    url = meticulousteURL(domain=f"{domain}{api}",params=params)
+def getAccessToken(domain: str, api: str, params: dict) -> Response:
+    url = meticulousteURL(domain=f"{domain}{api}", params=params)
     return get(url=url, headers={"Content-Type": "application/json"})
 
 
 @exception
-def refreshAccessToken(): ...
+def refreshAccessToken(domain: str, api: str, params: dict) -> Response:
+    return get(meticulousteURL(domain=f"{domain}{api}", params=params), headers={"Content-Type": "application/json"})
 
 
 @staticmethod
@@ -100,12 +101,15 @@ def requestGeneral(
     params: dict,
     body: dict,
     secret: str,
+    key="data"
 ) -> Response:
     timestamp = str(int(datetime.timestamp(datetime.now())))
     if "timestamp" not in params.keys():
         params["timestamp"] = timestamp
     sinature = generateSign(api=api, params=params, secret=secret)
     params.update({"sign": sinature})
+    if key == "json":
+        return method(url=meticulousteURL(domain=f"{domain}{api}", params=params), params=params, json=body)
     return method(url=meticulousteURL(domain=f"{domain}{api}", params=params), params=params, data=body)
 
 

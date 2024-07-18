@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name="timpypi", version="2.2.0",
+setup(name="timpypi", version="2.3.3",
       description="Pakages for Odoo Developer",
       long_description="", packages=["timpypi"],
       author="Bùi Đức Tuấn (Tim)",

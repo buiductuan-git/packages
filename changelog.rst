@@ -1,1 +1,0 @@
-[2.0.0] Rename all function

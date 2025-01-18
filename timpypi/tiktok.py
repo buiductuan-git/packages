@@ -10,7 +10,7 @@ from timpypi.utils import exception
 
 @exception
 def request(method, domain, api, headers, body, params, ttype) -> Response:
-    """ Custom request special for TikTok API
+    """Custom request special for TikTok API
     :param Request method: one of `get`, `post`, `put`, `patch`, `delete`
     :param str domain: one of `https://auth.tiktok-shops.com` or ```https://open-api.tiktokglobalshop.com```
     :param str api: api special for request. example: `/authorization/202309/shops`
